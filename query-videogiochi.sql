@@ -227,7 +227,24 @@ WHERE awards.id = 5 AND award_videogame.year = 2018 AND tournaments.year = 2019
 
 --10- Selezionare i dati della prima software house che ha rilasciato un gioco, assieme ai dati del gioco stesso (software house id : 5)
 
+SELECT *
+FROM software_houses
+INNER JOIN videogames
+ON software_houses.id = videogames.software_house_id
+WHERE videogames.release_date = (SELECT MIN(videogames.release_date) FROM videogames)
+
 --11- Selezionare i dati del videogame (id, name, release_date, totale recensioni) con più recensioni (videogame id : 398)
+
+SELECT TOP 1 videogames.id, videogames.name, videogames.release_date,
+COUNT(reviews.videogame_id) as 'totale_recensioni'
+FROM videogames
+JOIN reviews
+ON videogames.id = reviews.videogame_id
+GROUP BY videogames.id, videogames.name, videogames.release_date
+ORDER BY totale_recensioni DESC
+
+
+
 
 --12- Selezionare la software house che ha vinto più premi tra il 2015 e il 2016 (software house id : 1)
 
