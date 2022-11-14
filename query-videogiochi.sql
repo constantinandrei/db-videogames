@@ -150,11 +150,44 @@ ORDER BY videogames.id
 
 --4- Selezionare i dati di tutte le software house che hanno rilasciato almeno un gioco dopo il 2020, mostrandoli una sola volta (6)
 
+SELECT DISTINCT software_houses.id, software_houses.name
+FROM software_houses
+INNER JOIN videogames
+ON software_houses.id = videogames.software_house_id
+WHERE DATEPART(year, videogames.release_date) >= 2020
+
 --5- Selezionare i premi ricevuti da ogni software house per i videogiochi che ha prodotto (55)
+
+SELECT software_houses.id, software_houses.name, awards.name, award_videogame.year
+FROM awards
+INNER JOIN award_videogame
+ON awards.id = award_videogame.award_id
+INNER JOIN videogames
+ON award_videogame.videogame_id = videogames.id
+INNER JOIN software_houses
+ON videogames.software_house_id = software_houses.id
+ORDER BY software_houses.id
 
 --6- Selezionare categorie e classificazioni PEGI dei videogiochi che hanno ricevuto recensioni da 4 e 5 stelle, mostrandole una sola volta (3363)
 
+SELECT DISTINCT videogames.name, pegi_labels.name, categories.name
+FROM videogames
+INNER JOIN category_videogame
+ON videogames.id = category_videogame.videogame_id
+INNER JOIN categories
+ON category_videogame.category_id = categories.id
+INNER JOIN pegi_label_videogame
+ON videogames.id = pegi_label_videogame.videogame_id
+INNER JOIN pegi_labels
+ON pegi_label_videogame.pegi_label_id = pegi_labels.id
+INNER JOIN reviews
+ON videogames.id = reviews.videogame_id
+WHERE reviews.rating >= 4
+
 --7- Selezionare quali giochi erano presenti nei tornei nei quali hanno partecipato i giocatori il cui nome inizia per 'S' (474)
+
+SELECT *
+FROM 
 
 --8- Selezionare le città in cui è stato giocato il gioco dell'anno del 2018 (36)
 
