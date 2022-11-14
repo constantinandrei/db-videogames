@@ -186,13 +186,42 @@ WHERE reviews.rating >= 4
 
 --7- Selezionare quali giochi erano presenti nei tornei nei quali hanno partecipato i giocatori il cui nome inizia per 'S' (474)
 
-SELECT *
-FROM 
+SELECT DISTINCT videogames.id, videogames.name
+FROM players
+INNER JOIN player_tournament
+ON players.id = player_tournament.player_id
+INNER JOIN tournament_videogame
+ON tournament_videogame.tournament_id = player_tournament.tournament_id
+INNER JOIN videogames
+ON videogames.id = tournament_videogame.videogame_id
+WHERE players.name like 'S%'
 
 --8- Selezionare le città in cui è stato giocato il gioco dell'anno del 2018 (36)
 
---9- Selezionare i giocatori che hanno giocato al gioco più atteso del 2018 in un torneo del 2019 (3306)
+SELECT tournaments.city
+FROM tournaments
+INNER JOIN tournament_videogame
+ON tournaments.id = tournament_videogame.tournament_id
+INNER JOIN award_videogame
+ON tournament_videogame.videogame_id = award_videogame.videogame_id
+INNER JOIN awards
+ON award_videogame.award_id = awards.id
+WHERE awards.id = 1 AND award_videogame.year = 2018
 
+--9- Selezionare i giocatori che hanno giocato al gioco più atteso del 2018 in un torneo del 2019 (3306)
+SELECT players.id, players.name
+FROM tournaments
+INNER JOIN tournament_videogame
+ON tournaments.id = tournament_videogame.tournament_id
+INNER JOIN award_videogame
+ON tournament_videogame.videogame_id = award_videogame.videogame_id
+INNER JOIN awards
+ON award_videogame.award_id = awards.id
+INNER JOIN player_tournament
+ON player_tournament.tournament_id = tournaments.id
+INNER JOIN players
+ON players.id = player_tournament.player_id
+WHERE awards.id = 5 AND award_videogame.year = 2018 AND tournaments.year = 2019
 
 --*********** BONUS ***********
 
